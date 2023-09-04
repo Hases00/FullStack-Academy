@@ -1,0 +1,28 @@
+body{
+    background-color: blue; 
+ }
+
+ h1 {
+    text-decoration: underline;
+    text-align: center; 
+    color: rgb(255, 2, 2); 
+ }
+
+ p {
+    text-decoration: solid;
+    text-align: justify; 
+    color: rgb(69, 243, 0);
+    font-size: 1rem; /* Font Scale */
+}
+d {
+    text-decoration: wavy;
+    text-align: justify; 
+    color: rgb(238, 255, 0);
+}
+.wavy {
+    text-decoration-line: underline;
+    text-decoration-style: wavy;
+    text-decoration-color: red;
+}
+
+
