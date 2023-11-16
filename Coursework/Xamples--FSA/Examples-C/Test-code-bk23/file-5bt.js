@@ -72,7 +72,7 @@ const renderAllPlayers = (playerList) => {
         playerContainer.innerHTML = playerContainerHTML;
 
         const playerDetailBtns = document.querySelectorAll('.player-detail-btn');
-        const playerRemoveBtns = document.querySelectorAll('.player-remove-btn');
+        const playerRemoveBtns  = document.querySelectorAll('.player-remove-btn');
 
         playerDetailBtns.forEach((btn, index) => {
             btn.addEventListener('click', () => {
