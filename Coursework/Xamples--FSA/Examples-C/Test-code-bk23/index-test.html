@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Player Roster</title>
+    <style>
+      body {
+        background: #009933; /* Green for the soccer field */
+      }
+      #new-player-form {
+        width: 80%;
+        margin: 0 auto;
+        padding: 20px;
+        background: white; /* White for the lines */
+        border-radius: 10px;
+      }
+      .form-field {
+        margin-bottom: 10px;
+      }
+      .form-field label {
+        display: block;
+        margin-bottom: 5px;
+      }
+      .form-field input {
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+      }
+      .form-field input[type="submit"] {
+        background: #0066cc; /* Blue for the submit button */
+        color: white;
+        cursor: pointer;
+      }
+      .form-field input[type="submit"]:hover {
+        background: #0055a3;
+      }
+    </style>
+  </head>
+  <body>
+    <form id="new-player-form">
+      <div class="form-field">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" />
+      </div>
+      <div class="form-field">
+        <label for="teamID">Team ID:</label>
+        <input type="text" id="teamID" name="teamID" />
+      </div>
+      <div class="form-field">
+        <label for="imageUrl">Image URL:</label>
+        <input type="text" id="imageUrl" name="imageUrl" />
+      </div>
+      <div class="form-field">
+        <input type="submit" value="Add Player" />
+      </div>
+    </form>
+
+    <script>
+      // Your JavaScript code goes here
+    </script>
+  </body>
+</html>
