@@ -1,0 +1,24 @@
+{
+  "name": "unit_4_block_37",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start:dev": "nodemon server"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
+    "express": "^4.19.1",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.11.3",
+    "react-router-dom": "^6.22.3",
+    "uuid": "^9.0.1"
+  }
+}
