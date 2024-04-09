@@ -1,10 +1,14 @@
 // import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
+import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
+import NavigationBar from "./components/NavigationBar";
 import Login from "./components/Login";
 import ProductList from "./components/ProductList";
+import ProductDetails from "./components/ProductDetails";
 import Cart from "./components/Cart";
-import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
+import Checkout from "./components/Checkout";
 import "./index.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   const [auth, setAuth] = useState({});
@@ -231,9 +235,15 @@ function App() {
       console.log(json);
     }
   };
+  // Logout the user
+  const logout = () => {
+    window.localStorage.removeItem("token");
+    setAuth({});
+  };
 
   return (
     <BrowserRouter>
+      <NavigationBar logout={logout} />
       <Switch>
         <Route path="/login">
           {auth.id ? <Redirect to="/" /> : <Login setAuth={setAuth} />}
@@ -250,20 +260,25 @@ function App() {
             />
           )}
         </Route>
-        <Route path="/">
-          {" "}
+        <Route path="/checkout">
+          {!auth.id ? <Redirect to="/login" /> : <Checkout orders={orders} />}
+        </Route>
+        <Route path="/product/:id">
           {!auth.id ? (
             <Redirect to="/login" />
           ) : (
-            <ProductList
-              products={products}
-              favorites={favorites}
-              addFavorite={addFavorite}
-              removeFavorite={removeFavorite}
-              addToCart={addToCart}
-              cartisLoading={cartisLoading}
-            />
+            <ProductDetails addToCart={addToCart} />
           )}
+        </Route>
+        <Route path="/">
+          <ProductList
+            products={products}
+            favorites={auth.id ? favorites : []}
+            addFavorite={auth.id ? addFavorite : null}
+            removeFavorite={auth.id ? removeFavorite : null}
+            addToCart={auth.id ? addToCart : null}
+            cartisLoading={cartisLoading}
+          />
         </Route>
       </Switch>
     </BrowserRouter>

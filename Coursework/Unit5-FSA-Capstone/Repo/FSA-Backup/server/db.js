@@ -10,6 +10,7 @@ const JWT = process.env.JWT || "shhh";
 const createTables = async () => {
   const SQL = `
     DROP TABLE IF EXISTS order_items;
+    DROP TABLE IF EXISTS reviews;
     DROP TABLE IF EXISTS favorites;
     DROP TABLE IF EXISTS cart;
     DROP TABLE IF EXISTS orders;
@@ -63,6 +64,14 @@ const createTables = async () => {
       order_id UUID REFERENCES orders(id) NOT NULL,
       product_id UUID REFERENCES products(id) NOT NULL,
       quantity INTEGER NOT NULL
+    );
+
+    CREATE TABLE reviews(
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      user_id UUID REFERENCES users(id) NOT NULL,
+      product_id UUID REFERENCES products(id) NOT NULL,
+      content TEXT NOT NULL,
+      rating INTEGER NOT NULL
     );
   `;
   await client.query(SQL);
@@ -369,6 +378,30 @@ const fetchOrderTotal = async (order_id) => {
   return response.rows[0].total;
 };
 
+// Review Product
+
+const getReviews = async (productId) => {
+  const SQL = `SELECT * FROM reviews WHERE product_id = $1`;
+  const reviews = await client.query(SQL, [productId]);
+  return reviews.rows;
+};
+
+const createReview = async (productId, { content, rating }) => {
+  const SQL = `INSERT INTO reviews (user_id, product_id, content, rating) VALUES ($1, $2, $3, $4) RETURNING *`;
+  const review = await client.query(SQL, [
+    req.user.id,
+    productId,
+    content,
+    rating,
+  ]);
+  return review.rows[0];
+};
+
+const deleteReview = async (reviewId) => {
+  const SQL = `DELETE FROM reviews WHERE id = $1`;
+  await client.query(SQL, [reviewId]);
+};
+
 module.exports = {
   client,
   createTables,
@@ -396,4 +429,7 @@ module.exports = {
   destroyFavorite,
   authenticate,
   findUserWithToken,
+  getReviews,
+  createReview,
+  deleteReview,
 };

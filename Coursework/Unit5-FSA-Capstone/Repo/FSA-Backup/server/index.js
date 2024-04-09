@@ -25,6 +25,9 @@ const {
   destroyFavorite,
   authenticate,
   findUserWithToken,
+  getReviews,
+  createReview,
+  deleteReview,
 } = require("./db");
 
 const express = require("express");
@@ -291,6 +294,29 @@ app.get("/api/orders/:id/items", async (req, res, next) => {
 app.get("/api/orders/:id/total", async (req, res, next) => {
   try {
     res.send({ total: await fetchOrderTotal(req.params.id) });
+  } catch (ex) {
+    next(ex);
+  }
+});
+// Reviews Products
+app.get("/api/products/:id/reviews", async (req, res, next) => {
+  try {
+    res.send(await getReviews(req.params.id));
+  } catch (ex) {
+    next(ex);
+  }
+});
+app.post("/api/products/:id/reviews", async (req, res, next) => {
+  try {
+    res.send(await createReview(req.params.id, req.body));
+  } catch (ex) {
+    next(ex);
+  }
+});
+app.delete("/api/products/:id/reviews/:reviewId", async (req, res, next) => {
+  try {
+    await deleteReview(req.params.reviewId);
+    res.sendStatus(204);
   } catch (ex) {
     next(ex);
   }

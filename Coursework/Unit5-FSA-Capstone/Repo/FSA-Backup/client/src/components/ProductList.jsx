@@ -12,7 +12,7 @@ const ProductList = ({
   return (
     <div>
       <ul className="product-list">
-        <div>Home, Slack</div>
+        <h1>Products</h1>
         {products.map((product) => {
           const isFavorite = favorites.find(
             (favorite) => favorite.product_id === product.id
@@ -33,21 +33,28 @@ const ProductList = ({
 
               <div className="product-actions">
                 {isFavorite ? (
-                  <button onClick={() => removeFavorite(isFavorite.id)}>
+                  <button
+                    onClick={() =>
+                      removeFavorite && removeFavorite(isFavorite.id)
+                    }
+                  >
                     Remove from Favorites
                   </button>
                 ) : (
-                  <button onClick={() => addFavorite(product.id)}>
+                  <button
+                    onClick={() => addFavorite && addFavorite(product.id)}
+                  >
                     Add to Favorites
                   </button>
                 )}
                 <button
-                  onClick={() => addToCart(product.id)}
+                  onClick={() => addToCart && addToCart(product.id)}
                   disabled={cartisLoading}
                 >
                   {" "}
                   {cartisLoading ? "Loading" : "Add to Cart"}
                 </button>
+                <Link to={`/product/${product.id}`}>View Details</Link>
               </div>
             </li>
           );
