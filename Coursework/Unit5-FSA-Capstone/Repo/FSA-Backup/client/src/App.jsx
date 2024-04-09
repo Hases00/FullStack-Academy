@@ -9,6 +9,7 @@ import Cart from "./components/Cart";
 import Checkout from "./components/Checkout";
 import "./index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min";
 
 function App() {
   const [auth, setAuth] = useState({});
@@ -244,43 +245,45 @@ function App() {
   return (
     <BrowserRouter>
       <NavigationBar logout={logout} />
-      <Switch>
-        <Route path="/login">
-          {auth.id ? <Redirect to="/" /> : <Login setAuth={setAuth} />}
-        </Route>
-        <Route path="/cart">
-          {!auth.id ? (
-            <Redirect to="/login" />
-          ) : (
-            <Cart
-              cart={cart}
-              updateCart={updateCart}
-              removeFromCart={removeFromCart}
-              checkout={checkout}
+      <div className="container">
+        <Switch>
+          <Route path="/login">
+            {auth.id ? <Redirect to="/" /> : <Login setAuth={setAuth} />}
+          </Route>
+          <Route path="/cart">
+            {!auth.id ? (
+              <Redirect to="/login" />
+            ) : (
+              <Cart
+                cart={cart}
+                updateCart={updateCart}
+                removeFromCart={removeFromCart}
+                checkout={checkout}
+              />
+            )}
+          </Route>
+          <Route path="/checkout">
+            {!auth.id ? <Redirect to="/login" /> : <Checkout orders={orders} />}
+          </Route>
+          <Route path="/product/:id">
+            {!auth.id ? (
+              <Redirect to="/login" />
+            ) : (
+              <ProductDetails addToCart={addToCart} />
+            )}
+          </Route>
+          <Route path="/">
+            <ProductList
+              products={products}
+              favorites={auth.id ? favorites : []}
+              addFavorite={auth.id ? addFavorite : null}
+              removeFavorite={auth.id ? removeFavorite : null}
+              addToCart={auth.id ? addToCart : null}
+              cartisLoading={cartisLoading}
             />
-          )}
-        </Route>
-        <Route path="/checkout">
-          {!auth.id ? <Redirect to="/login" /> : <Checkout orders={orders} />}
-        </Route>
-        <Route path="/product/:id">
-          {!auth.id ? (
-            <Redirect to="/login" />
-          ) : (
-            <ProductDetails addToCart={addToCart} />
-          )}
-        </Route>
-        <Route path="/">
-          <ProductList
-            products={products}
-            favorites={auth.id ? favorites : []}
-            addFavorite={auth.id ? addFavorite : null}
-            removeFavorite={auth.id ? removeFavorite : null}
-            addToCart={auth.id ? addToCart : null}
-            cartisLoading={cartisLoading}
-          />
-        </Route>
-      </Switch>
+          </Route>
+        </Switch>
+      </div>
     </BrowserRouter>
   );
 }

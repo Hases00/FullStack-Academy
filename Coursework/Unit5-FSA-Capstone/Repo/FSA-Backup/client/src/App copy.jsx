@@ -543,3 +543,152 @@ function App() {
 }
 
 export default App;
+
+// import { useState, useEffect } from "react";
+// import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
+// import Login from "./components/Login";
+// import ProductList from "./components/ProductList";
+// import Cart from "./components/Cart";
+// import Checkout from "./components/Checkout";
+// import NavigationBar from "./components/NavigationBar";
+// import ProductDetails from "./components/ProductDetails";
+// import 'bootstrap/dist/css/bootstrap.min.css';
+// import "./index.css";
+
+// function App() {
+//   // ... (rest of your code)
+
+//   // Logout the user
+//   const logout = () => {
+//     window.localStorage.removeItem("token");
+//     setAuth({});
+//   };
+
+//   return (
+//     <BrowserRouter>
+//       <div className="banner"> {/* Add banner */}
+//         <h1>Welcome to Our Store!</h1>
+//       </div>
+//       <NavigationBar logout={logout} /> {/* Pass the logout function to the NavigationBar component */}
+//       <div className="container"> {/* Add Bootstrap container class */}
+//         <Switch>
+//           {/* ... (rest of your routes) */}
+//         </Switch>
+//       </div>
+//       <footer className="footer"> {/* Add footer */}
+//         <p>© 2023 Our Store. All rights reserved.</p>
+//       </footer>
+//     </BrowserRouter>
+//   );
+// }
+
+// export default App;
+
+// import PropTypes from "prop-types";
+// import { Link } from "react-router-dom";
+
+// const ProductList = ({
+//   removeFavorite,
+//   addFavorite,
+//   addToCart,
+//   products,
+//   favorites,
+//   cartisLoading,
+// }) => {
+//   return (
+//     <div className="row"> {/* Replace product-list class with Bootstrap row class */}
+//       <div id="carouselExampleIndicators" className="carousel slide" data-bs-ride="carousel">
+//         <div className="carousel-inner">
+//           {products.map((product, index) => (
+//             <div className={`carousel-item ${index === 0 ? 'active' : ''}`}>
+//               <img src={product.image} className="d-block w-100" alt={product.name} />
+//               <div className="carousel-caption d-none d-md-block">
+//                 <h5>{product.name}</h5>
+//                 <p>{product.description}</p>
+//               </div>
+//             </div>
+//           ))}
+//         </div>
+//         <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+//           <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+//           <span className="visually-hidden">Previous</span>
+//         </button>
+//         <button className="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+//           <span className="carousel-control-next-icon" aria-hidden="true"></span>
+//           <span className="visually-hidden">Next</span>
+//         </button>
+//       </div>
+//       {/* ... (rest of your code) */}
+//     </div>
+//   );
+// };
+// export default ProductList;
+
+// import PropTypes from "prop-types";
+// import { Link } from "react-router-dom";
+// import { useState } from "react"; // Import useState
+
+// const ProductList = ({
+//   removeFavorite,
+//   addFavorite,
+//   addToCart,
+//   products,
+//   favorites,
+//   cartisLoading,
+// }) => {
+//   const [search, setSearch] = useState(''); // Add state for search
+
+//   const filteredProducts = products
+
+/// filter and Sort products
+// import PropTypes from "prop-types";
+// import { Link } from "react-router-dom";
+// import { useState } from "react";
+
+// const ProductList = ({
+//   removeFavorite,
+//   addFavorite,
+//   addToCart,
+//   products,
+//   favorites,
+//   cartisLoading,
+// }) => {
+//   const [search, setSearch] = useState('');
+//   const [sort, setSort] = useState('name');
+//   const [filter, setFilter] = useState('');
+
+//   const filteredProducts = products
+//     .filter(product => product.name.toLowerCase().includes(search.toLowerCase()))
+//     .filter(product => filter ? product.category === filter : true)
+//     .sort((a, b) => {
+//       if (sort === 'name') {
+//         return a.name.localeCompare(b.name);
+//       } else if (sort === 'price') {
+//         return a.price - b.price;
+//       } else {
+//         return 0;
+//       }
+//     });
+
+//   // ... (rest of your code)
+
+//   return (
+//     <div className="row">
+//       <div className="col-12">
+//         <input type="text" placeholder="Search" value={search} onChange={(e) => setSearch(e.target.value)} />
+//         <select value={sort} onChange={(e) => setSort(e.target.value)}>
+//           <option value="name">Sort by name</option>
+//           <option value="price">Sort by price</option>
+//         </select>
+//         <select value={filter} onChange={(e) => setFilter(e.target.value)}>
+//           <option value="">Filter by category</option>
+//           {/* Add your categories here */}
+//           <option value="category1">Category 1</option>
+//           <option value="category2">Category 2</option>
+//         </select>
+//       </div>
+//       {/* ... (rest of your code) */}
+//     </div>
+//   );
+// };
+// export default ProductList;
