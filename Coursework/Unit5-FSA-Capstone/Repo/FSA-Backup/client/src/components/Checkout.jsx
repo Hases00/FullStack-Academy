@@ -7,11 +7,13 @@ const Checkout = ({ orders }) => {
       {orders.map((order, index) => (
         <div key={index}>
           <h3>Order {index + 1}</h3>
-          {order.items.map((item, i) => (
-            <p key={i}>
-              {item.product.name}: ${item.product.price} x {item.quantity}
-            </p>
-          ))}
+          {order && order.items
+            ? order.items.map((item, i) => (
+                <p key={i}>
+                  {item.product.name}: ${item.product.price} x {item.quantity}
+                </p>
+              ))
+            : null}
         </div>
       ))}
     </div>

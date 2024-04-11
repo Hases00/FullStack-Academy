@@ -258,6 +258,7 @@ const fetchCategories = async () => {
 
 // Cart
 const addToCart = async ({ user_id, product_id, quantity }) => {
+  console.log("addToCart", quantity);
   const SQL = `
     INSERT INTO cart(id, user_id, product_id, quantity) VALUES($1, $2, $3, $4) RETURNING *
   `;
@@ -267,6 +268,7 @@ const addToCart = async ({ user_id, product_id, quantity }) => {
     product_id,
     quantity,
   ]);
+  console.log(response.rows);
   return response.rows[0];
 };
 
@@ -298,34 +300,28 @@ const createCartItem = async ({ user_id, product_id, quantity }) => {
   return response.rows[0];
 };
 
-const updateCart = async ({ id, user_id, product_id, quantity }) => {
+const updateCart = async ({ user_id, product_id, quantity }) => {
   const SQL = `
     UPDATE cart
-    SET user_id = $2, product_id = $3, quantity = $4
-    WHERE id = $1
+    SET quantity = $3
+    WHERE user_id = $1 AND product_id = $2
     RETURNING *
   `;
-  const response = await client.query(SQL, [id, user_id, product_id, quantity]);
+  const response = await client.query(SQL, [user_id, product_id, quantity]);
   return response.rows[0];
 };
-// INSERT INTO cartItems (cart_id, product_id, quantity) VALUES ($1, $2, $3) ON CONFLICT (cart_id, product_id) DO UPDATE SET quantity = $3 RETURNING *
 
 const fetchCart = async (user_id) => {
   const SQL = `
-    SELECT c.*, p.* 
+    SELECT c.*, p.name , p.price , c.quantity
     FROM cart c
     JOIN products p ON p.id = c.product_id
     WHERE c.user_id = $1
   `;
   const response = await client.query(SQL, [user_id]);
+  console.log(response.rows);
   return response.rows.map((row) => ({
     ...row,
-    product: {
-      id: row.product_id,
-      name: row.name,
-      price: row.price,
-      // include other product properties here
-    },
   }));
 };
 

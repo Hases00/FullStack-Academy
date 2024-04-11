@@ -65,6 +65,7 @@ function App() {
       setCart(json);
     }
   };
+
   useEffect(() => {
     if (auth.id) {
       fetchCart();
@@ -132,11 +133,10 @@ function App() {
 
     const json = await response.json();
     setCartisLoading(false);
-    console.log(json);
     if (response.ok) {
       fetchCart();
     } else {
-      console.log(json);
+      console.error("Error fetching cart", json);
     }
   };
 
@@ -155,7 +155,7 @@ function App() {
     if (response.ok) {
       setFavorites([...favorites, json]);
     } else {
-      console.log(json);
+      console.error("Error Adding favorite", json);
     }
   };
 
@@ -171,51 +171,40 @@ function App() {
     if (response.ok) {
       setFavorites(favorites.filter((favorite) => favorite.id !== id));
     } else {
-      console.log();
+      console.error("Error removing favorites");
     }
   };
   // Remove Cart Items
   const removeFromCart = async (id) => {
-    // Optimistically update the cart state
-    setCart(cart.filter((item) => item.id !== id));
+    // setCart(cart.filter((item) => item.id !== id));
 
-    // Then, send the network request to remove the cart item from the server
-    const response = await fetch(`/api/users/${auth.id}/cart/${id}`, {
+    const response = await fetch(`/api/users/${auth.id}/product/${id}`, {
       method: "DELETE",
       headers: {
         authorization: window.localStorage.getItem("token"),
       },
     });
-
-    // If the network request fails, revert the cart state
     if (!response.ok) {
       console.error(`Failed to remove cart item with id ${id}`);
-      setCart(cart); // Revert the cart state
+      // setCart(cart); // Revert the cart state
     }
+    fetchCart();
   };
-  // Update the cart
-
-  const updateCart = async (id, quantity) => {
-    // Optimistically update the cart state
-    setCart(
-      cart.map((item) => (item.id === id ? { ...item, quantity } : item))
-    );
-
-    // Then, send the network request to update the cart item on the server
-    const response = await fetch(`/api/users/${auth.id}/cart/${id}`, {
+  // // Update the cart
+  const updateCart = async ({ product_id, quantity }) => {
+    const response = await fetch(`/api/users/${auth.id}/cart`, {
       method: "PUT",
-      body: JSON.stringify({ quantity }),
+      body: JSON.stringify({ product_id, quantity }),
       headers: {
         "Content-Type": "application/json",
         authorization: window.localStorage.getItem("token"),
       },
     });
-
-    // If the network request fails, revert the cart state
     if (!response.ok) {
-      console.error(`Failed to update cart item with id ${id}`);
-      setCart(cart); // Revert the cart state
+      console.error(`Failed to update cart item with id ${product_id}`);
+      // setCart(cart); // Revert the cart state
     }
+    fetchCart();
   };
 
   // Checkout items
@@ -232,8 +221,9 @@ function App() {
     if (response.ok) {
       setCart([]);
       setOrders([...orders, json]);
+      return true;
     } else {
-      console.log(json);
+      console.error("Checkout error", json);
     }
   };
   // Logout the user
@@ -244,7 +234,7 @@ function App() {
 
   return (
     <BrowserRouter>
-      <NavigationBar logout={logout} />
+      <NavigationBar auth={auth} logout={logout} />
       <div className="container">
         <Switch>
           <Route path="/login">
@@ -280,6 +270,9 @@ function App() {
               removeFavorite={auth.id ? removeFavorite : null}
               addToCart={auth.id ? addToCart : null}
               cartisLoading={cartisLoading}
+              cart={cart}
+              removeFromCart={removeFromCart}
+              auth={auth}
             />
           </Route>
         </Switch>

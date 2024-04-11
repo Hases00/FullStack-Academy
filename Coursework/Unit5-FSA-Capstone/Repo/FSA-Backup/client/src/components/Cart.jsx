@@ -1,28 +1,52 @@
 // Cart Component
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 const Cart = ({ cart, updateCart, checkout, removeFromCart }) => {
+  const history = useHistory();
+
+  const handleCheckout = async () => {
+    await checkout();
+    history.push("/checkout");
+  };
   return (
     <div className="cart">
       <h2>Cart</h2>
       {cart.map((item, key) =>
-        item.product ? (
+        item ? (
           <div key={key}>
-            <p>{item.product.name}</p>
-            <p>Price: {item.product.price}</p>
-            <button onClick={() => updateCart(item.id, item.quantity - 1)}>
+            <p>{item.name}</p>
+            <p>Price: {item.price}</p>
+
+            <button
+              disabled={item.quantity === 1}
+              onClick={() =>
+                updateCart({
+                  product_id: item.product_id,
+                  quantity: item.quantity - 1,
+                })
+              }
+            >
               -
             </button>
             <span>{item.quantity}</span>
-            <button onClick={() => updateCart(item.id, item.quantity + 1)}>
+            <button
+              onClick={() =>
+                updateCart({
+                  product_id: item.product_id,
+                  quantity: item.quantity + 1,
+                })
+              }
+            >
               +
             </button>
-            <button onClick={() => removeFromCart(item.id)}>Remove</button>
+            <button onClick={() => removeFromCart(item.product_id)}>
+              Remove
+            </button>
           </div>
         ) : null
       )}
-      <button onClick={checkout}>Checkout</button>
+      <button onClick={handleCheckout}>Checkout</button>
       <Link to="/">Return</Link>
     </div>
   );

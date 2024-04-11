@@ -1,14 +1,23 @@
+import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
-const NavigationBar = () => {
+const NavigationBar = ({ auth, logout }) => {
   return (
     <nav>
       <Link to="/">Home</Link>
       <Link to="/cart">Cart</Link>
       <Link to="/profile">Profile</Link>
+      {auth && auth.id ? <button onClick={logout}>Logout</button> : null}
       {/* Add more links as needed */}
     </nav>
   );
+};
+
+NavigationBar.propTypes = {
+  auth: PropTypes.shape({
+    id: PropTypes.any,
+  }),
+  logout: PropTypes.any,
 };
 
 export default NavigationBar;

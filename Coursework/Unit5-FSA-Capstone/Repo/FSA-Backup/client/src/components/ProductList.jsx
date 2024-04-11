@@ -3,16 +3,22 @@ import { Link } from "react-router-dom";
 
 const ProductList = ({
   removeFavorite,
+  removeFromCart,
   addFavorite,
   addToCart,
   products,
   favorites,
   cartisLoading,
+  cart,
+  auth,
 }) => {
+  const isAddedtoCart = (product_id) => {
+    return !!cart.find((item) => item.product_id === product_id);
+  };
   return (
     <div>
+      <h1>Products</h1>
       <ul className="product-list">
-        <h1>Products</h1>
         {products.map((product) => {
           const isFavorite = favorites.find(
             (favorite) => favorite.product_id === product.id
@@ -30,37 +36,44 @@ const ProductList = ({
                   />
                 </div>
               </div>
+              {auth.id && (
+                <div className="product-actions">
+                  {isFavorite ? (
+                    <button
+                      onClick={() =>
+                        removeFavorite && removeFavorite(isFavorite.id)
+                      }
+                    >
+                      Remove from Favorites
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => addFavorite && addFavorite(product.id)}
+                    >
+                      Add to Favorites
+                    </button>
+                  )}
+                  {isAddedtoCart(product.id) ? (
+                    <button onClick={() => removeFromCart(product.id)}>
+                      Remover
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => addToCart && addToCart(product.id)}
+                      disabled={cartisLoading}
+                    >
+                      {" "}
+                      {cartisLoading ? "Loading" : "Add to Cart"}
+                    </button>
+                  )}
 
-              <div className="product-actions">
-                {isFavorite ? (
-                  <button
-                    onClick={() =>
-                      removeFavorite && removeFavorite(isFavorite.id)
-                    }
-                  >
-                    Remove from Favorites
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => addFavorite && addFavorite(product.id)}
-                  >
-                    Add to Favorites
-                  </button>
-                )}
-                <button
-                  onClick={() => addToCart && addToCart(product.id)}
-                  disabled={cartisLoading}
-                >
-                  {" "}
-                  {cartisLoading ? "Loading" : "Add to Cart"}
-                </button>
-                <Link to={`/product/${product.id}`}>View Details</Link>
-              </div>
+                  <Link to={`/product/${product.id}`}>View Details</Link>
+                </div>
+              )}
             </li>
           );
         })}
       </ul>
-      <Link to="/cart">Cart</Link>
     </div>
   );
 };
@@ -68,10 +81,15 @@ const ProductList = ({
 ProductList.propTypes = {
   addFavorite: PropTypes.func,
   addToCart: PropTypes.func,
+  auth: PropTypes.shape({
+    id: PropTypes.any,
+  }),
+  cart: PropTypes.array,
   cartisLoading: PropTypes.bool,
   favorites: PropTypes.array,
   products: PropTypes.array,
   removeFavorite: PropTypes.func,
+  removeFromCart: PropTypes.func,
 };
 
 export default ProductList;
