@@ -2,20 +2,24 @@ import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
-const ProductDetails = ({ addToCart }) => {
+const ProductDetails = ({
+  addToCart,
+  addFavorite,
+  removeFavorite,
+  fetchProduct,
+}) => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [review, setReview] = useState(null);
 
   useEffect(() => {
-    const fetchProduct = async () => {
-      const response = await fetch(`/api/products/${id}`);
-      const json = await response.json();
-      setProduct(json);
+    const getProduct = async () => {
+      const product = await fetchProduct(id);
+      setProduct(product);
     };
 
-    fetchProduct();
-  }, [id]);
+    getProduct();
+  }, [id, fetchProduct]);
 
   const submitReview = async () => {
     // Add your API endpoint to submit the review
@@ -47,6 +51,12 @@ const ProductDetails = ({ addToCart }) => {
       <button onClick={() => addToCart && addToCart(product.id)}>
         Add to Cart
       </button>
+      <button onClick={() => addFavorite && addFavorite(product.id)}>
+        Add to Favorites
+      </button>
+      <button onClick={() => removeFavorite && removeFavorite(product.id)}>
+        Remove from Favorites
+      </button>
       <textarea
         value={review}
         onChange={(e) => setReview(e.target.value)}
@@ -58,7 +68,10 @@ const ProductDetails = ({ addToCart }) => {
 };
 
 ProductDetails.propTypes = {
+  addFavorite: PropTypes.func,
   addToCart: PropTypes.func,
+  fetchProduct: PropTypes.func,
+  removeFavorite: PropTypes.func,
 };
 
 export default ProductDetails;

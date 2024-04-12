@@ -1,4 +1,3 @@
-// import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import NavigationBar from "./components/NavigationBar";
@@ -7,6 +6,7 @@ import ProductList from "./components/ProductList";
 import ProductDetails from "./components/ProductDetails";
 import Cart from "./components/Cart";
 import Checkout from "./components/Checkout";
+import Orders from "./components/Orders";
 import "./index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
@@ -226,6 +226,27 @@ function App() {
       console.error("Checkout error", json);
     }
   };
+
+  // Fetch a Single Product
+  const fetchProduct = async (id) => {
+    try {
+      const response = await fetch(`/api/products/${id}`);
+      if (!response.ok) {
+        console.error("Error fetching product:", response.statusText);
+        return null;
+      }
+      if (response.status === 204) {
+        // No Content
+        return null;
+      }
+      const json = await response.json();
+      return json;
+    } catch (error) {
+      console.error("Error fetching product:", error);
+      return null;
+    }
+  };
+
   // Logout the user
   const logout = () => {
     window.localStorage.removeItem("token");
@@ -255,11 +276,19 @@ function App() {
           <Route path="/checkout">
             {!auth.id ? <Redirect to="/login" /> : <Checkout orders={orders} />}
           </Route>
+          <Route path="/orders">
+            {!auth.id ? <Redirect to="/login" /> : <Orders orders={orders} />}
+          </Route>
           <Route path="/product/:id">
             {!auth.id ? (
               <Redirect to="/login" />
             ) : (
-              <ProductDetails addToCart={addToCart} />
+              <ProductDetails
+                addToCart={addToCart}
+                addFavorite={addFavorite}
+                removeFavorite={removeFavorite}
+                fetchProduct={fetchProduct}
+              />
             )}
           </Route>
           <Route path="/">

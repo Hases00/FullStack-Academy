@@ -5,9 +5,16 @@ const NavigationBar = ({ auth, logout }) => {
   return (
     <nav>
       <Link to="/">Home</Link>
-      <Link to="/cart">Cart</Link>
-      <Link to="/profile">Profile</Link>
-      {auth && auth.id ? <button onClick={logout}>Logout</button> : null}
+      {auth && auth.id ? (
+        <>
+          <Link to="/cart">Cart</Link>
+          <Link to="/orders">Orders</Link>
+          <Link to="/profile">Profile</Link>
+          <button onClick={logout}>Logout</button>
+        </>
+      ) : (
+        <Link to="/login">Login</Link>
+      )}
       {/* Add more links as needed */}
     </nav>
   );

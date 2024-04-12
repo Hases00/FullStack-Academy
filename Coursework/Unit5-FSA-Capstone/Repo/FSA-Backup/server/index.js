@@ -9,6 +9,7 @@ const {
   removeFromCart,
   checkout,
   updateProduct,
+  fetchSingleProduct,
   destroyProduct,
   updateCart,
   isAdmin2,
@@ -127,6 +128,14 @@ app.delete(
 app.get("/api/products", async (req, res, next) => {
   try {
     res.send(await fetchProducts());
+  } catch (ex) {
+    next(ex);
+  }
+});
+
+app.get("/api/products/:id", async (req, res, next) => {
+  try {
+    res.send(await fetchSingleProduct());
   } catch (ex) {
     next(ex);
   }

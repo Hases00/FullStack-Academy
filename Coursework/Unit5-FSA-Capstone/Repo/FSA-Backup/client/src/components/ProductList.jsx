@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 const ProductList = ({
   removeFavorite,
@@ -12,14 +13,74 @@ const ProductList = ({
   cart,
   auth,
 }) => {
+  const [sortKey, setSortKey] = useState("");
+  const [filterKey, setFilterKey] = useState("");
+  const [filterValue, setFilterValue] = useState("");
+
   const isAddedtoCart = (product_id) => {
     return !!cart.find((item) => item.product_id === product_id);
   };
+
+  let sortedProducts = [...products];
+  if (sortKey) {
+    sortedProducts.sort((a, b) => (a[sortKey] > b[sortKey] ? 1 : -1));
+  }
+
+  let filteredProducts = [...sortedProducts];
+  if (filterKey && filterValue) {
+    if (filterKey === "price") {
+      filteredProducts = filteredProducts.filter(
+        (product) => product[filterKey] <= filterValue
+      );
+    } else {
+      filteredProducts = filteredProducts.filter(
+        (product) => product[filterKey] === filterValue
+      );
+    }
+  }
+
   return (
     <div>
       <h1>Products</h1>
+      <div>
+        <label>Sort by: </label>
+        <select value={sortKey} onChange={(e) => setSortKey(e.target.value)}>
+          <option value="">--Select--</option>
+          <option value="name">Name</option>
+          <option value="price">Price</option>
+          {/* Add more options as needed */}
+        </select>
+      </div>
+      <div>
+        <label>Filter by: </label>
+        <select
+          value={filterKey}
+          onChange={(e) => setFilterKey(e.target.value)}
+        >
+          <option value="">--Select--</option>
+          <option value="name">Name</option>
+          <option value="price">Price</option>
+          {/* Add more options as needed */}
+        </select>
+        {filterKey === "price" ? (
+          <input
+            type="range"
+            min="0"
+            max="1000" // Adjust this value based on your maximum price
+            value={filterValue}
+            onChange={(e) => setFilterValue(e.target.value)}
+          />
+        ) : (
+          <input
+            type="text"
+            placeholder="Filter Value"
+            value={filterValue}
+            onChange={(e) => setFilterValue(e.target.value)}
+          />
+        )}
+      </div>
       <ul className="product-list">
-        {products.map((product) => {
+        {filteredProducts.map((product) => {
           const isFavorite = favorites.find(
             (favorite) => favorite.product_id === product.id
           );

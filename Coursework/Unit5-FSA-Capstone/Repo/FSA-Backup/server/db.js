@@ -184,6 +184,14 @@ const fetchProducts = async () => {
   return response.rows;
 };
 
+const fetchSingleProduct = async (productId) => {
+  const SQL = `
+  SELECT * FROM products WHERE id = $1
+  `;
+  const response = await client.query(SQL, [productId]);
+  return response.rows[0];
+};
+
 const updateProduct = async ({
   id,
   name,
@@ -409,6 +417,7 @@ module.exports = {
   removeFromCart,
   checkout,
   updateProduct,
+  fetchSingleProduct,
   destroyProduct,
   updateCart,
   isAdmin2,
